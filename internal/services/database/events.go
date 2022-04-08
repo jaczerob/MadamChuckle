@@ -33,7 +33,7 @@ func (c *Database) UnregisterEvent(messageID string, channelID string) (err erro
 func (c *Database) GetEvents() (events []*Event, err error) {
 	events = make([]*Event, 0)
 
-	rows, err := c.db.Query("SELECT * FROM commands")
+	rows, err := c.db.Query("SELECT * FROM events")
 	if err != nil {
 		return
 	}
@@ -44,8 +44,7 @@ func (c *Database) GetEvents() (events []*Event, err error) {
 		var e int64
 		var m, c string
 
-		err = rows.Scan(&e, &m, &c)
-		if err != nil {
+		if err = rows.Scan(&e, &m, &c); err != nil {
 			return
 		}
 
