@@ -10,6 +10,8 @@
 # Intro
 Madam Chuckle is an easy to use Discord Bot targeted towards Toontown Rewritten Discord servers, inspired by my favorite NPC: Madam Chuckle. This bot's purpose is to help keep you up-to-date on all things Toontown Rewritten as well as help you with some things about the game!
 
+This bot is currently under heavy development and there may be things that are not 100% functional and a lot of features are currently not in place.
+
 ---
 # Features
 
@@ -31,5 +33,12 @@ Coming soon
 Soon, you will also be able to subscribe to these events per-user and get direct messages from Madam Chuckle whenever there is an update!
 
 ## Coming soon
-- Damage Calculator
+- Event tracking (population, field office duration, etc.)
+- Damage Calculator command
 - More to come
+
+---
+# TODO
+- Better logging
+    - More detailed output
+- Push planned features
