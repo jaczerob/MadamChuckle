@@ -19,6 +19,8 @@ discord:
 	token: ""
 redis:
 	addr: 127.0.0.1:6379
+prometheus:
+	addr: :8080
 `)
 
 	configCmd = &cobra.Command{

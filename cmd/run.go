@@ -13,6 +13,7 @@ import (
 
 	"github.com/jaczerob/madamchuckle/internal/inits"
 	"github.com/jaczerob/madamchuckle/internal/services/database"
+	"github.com/jaczerob/madamchuckle/internal/services/metrics"
 	"github.com/jaczerob/madamchuckle/internal/services/toontown"
 	"github.com/jaczerob/madamchuckle/internal/static"
 
@@ -91,6 +92,17 @@ var runCmd = &cobra.Command{
 			},
 		})
 
+		diBuilder.Add(di.Def{
+			Name: static.DiMetricsServer,
+			Build: func(ctn di.Container) (interface{}, error) {
+				return inits.InitMetricsServer()
+			},
+			Close: func(obj interface{}) error {
+				s := obj.(*metrics.MetricsServer)
+				return s.Shutdown()
+			},
+		})
+
 		ctn := diBuilder.Build()
 		defer func() {
 			if err := ctn.DeleteWithSubContainers(); err != nil {
@@ -112,6 +124,11 @@ var runCmd = &cobra.Command{
 
 		if err = session.Open(); err != nil {
 			log.WithError(err).Fatal("error opening discord session")
+		}
+
+		_, err = ctn.SafeGet(static.DiMetricsServer)
+		if err != nil {
+			log.WithError(err).Fatal("error starting metrics server")
 		}
 
 		ctn.Get(static.DiTaskScheduler)

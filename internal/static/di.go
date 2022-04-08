@@ -8,4 +8,5 @@ const (
 	DiDatabase          = "database"
 	DiTaskScheduler     = "taskscheduler"
 	DiTaskServer        = "taskserver"
+	DiMetricsServer     = "metricserver"
 )
