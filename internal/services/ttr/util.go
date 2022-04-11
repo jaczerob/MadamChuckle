@@ -1,26 +1,14 @@
-package toontown
+package ttr
 
 import (
 	"fmt"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/jaczerob/madamchuckle/pkg/toontown"
 )
 
-// ============================ INVASIONS ============================= //
-
-type Invasion struct {
-	AsOf     int    `json:"asOf"`
-	Type     string `json:"type"`
-	Progress string `json:"progress"`
-}
-
-type InvasionData struct {
-	LastUpdated int                 `json:"lastUpdated"`
-	Invasions   map[string]Invasion `json:"invasions"`
-}
-
-func (i *InvasionData) ToEmbed() (e *discordgo.MessageEmbed, err error) {
+func InvasionDataToEmbed(i *toontown.InvasionData) (e *discordgo.MessageEmbed, err error) {
 	districtField := &discordgo.MessageEmbedField{
 		Name:   "District",
 		Value:  "",
@@ -49,17 +37,7 @@ func (i *InvasionData) ToEmbed() (e *discordgo.MessageEmbed, err error) {
 	return
 }
 
-/////////////////////////////////////////////////////////////////////////
-
-// ============================ POPULATION ============================ //
-
-type PopulationData struct {
-	LastUpdated          int            `json:"lastUpdated"`
-	TotalPopulation      int            `json:"totalPopulation"`
-	PopulationByDistrict map[string]int `json:"populationByDistrict"`
-}
-
-func (p *PopulationData) ToEmbed() (e *discordgo.MessageEmbed, err error) {
+func PopulationDataToEmbed(p *toontown.PopulationData) (e *discordgo.MessageEmbed, err error) {
 	districtField := &discordgo.MessageEmbedField{
 		Name:   "District",
 		Value:  "",
@@ -96,24 +74,7 @@ func (p *PopulationData) ToEmbed() (e *discordgo.MessageEmbed, err error) {
 	return
 }
 
-/////////////////////////////////////////////////////////////////////////
-
-// ========================== FIELD OFFICES ========================== //
-
-type FieldOffice struct {
-	Department string `json:"department"`
-	Difficulty int    `json:"difficulty"`
-	Annexes    int    `json:"annexes"`
-	Open       bool   `json:"open"`
-	Expiring   int    `json:"expiring"`
-}
-
-type FieldOfficeData struct {
-	LastUpdated  int                    `json:"lastUpdated"`
-	FieldOffices map[string]FieldOffice `json:"fieldOffices"`
-}
-
-func (f *FieldOfficeData) ToEmbed() (e *discordgo.MessageEmbed, err error) {
+func FieldOfficeDataToEmbed(f *toontown.FieldOfficeData) (e *discordgo.MessageEmbed, err error) {
 	zoneField := &discordgo.MessageEmbedField{
 		Name:   "Zone",
 		Value:  "",
@@ -127,7 +88,7 @@ func (f *FieldOfficeData) ToEmbed() (e *discordgo.MessageEmbed, err error) {
 	}
 
 	for zone, fieldOffice := range f.FieldOffices {
-		zoneField.Value += fmt.Sprintf("**%s** %s\n", zone, strings.Repeat("⭐️", fieldOffice.Difficulty))
+		zoneField.Value += fmt.Sprintf("**%s** %s\n", zone.Name, strings.Repeat("⭐️", fieldOffice.Difficulty))
 
 		if fieldOffice.Open {
 			annexStr := "annexes"
@@ -152,4 +113,18 @@ func (f *FieldOfficeData) ToEmbed() (e *discordgo.MessageEmbed, err error) {
 	return
 }
 
-/////////////////////////////////////////////////////////////////////////
+func StatusToEmbed(s *toontown.Status) (e *discordgo.MessageEmbed, err error) {
+	e = &discordgo.MessageEmbed{
+		Title: "Toontown Rewritten Server Status",
+	}
+
+	if s.Open {
+		e.Description = "Toontown Rewritten is currently open!"
+	} else {
+		e.Description = fmt.Sprintf("⚠️Toontown Rewritten is currently closed!⚠️\n%s", s.Banner)
+	}
+
+	return
+}
+
+func SillyMeterToEmbed(s *toontown.SillyMeter) (e *discordgo.MessageEmbed, err error)

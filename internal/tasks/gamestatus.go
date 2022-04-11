@@ -13,8 +13,8 @@ import (
 	"github.com/sarulabs/di/v2"
 
 	"github.com/jaczerob/madamchuckle/internal/services/metrics"
-	"github.com/jaczerob/madamchuckle/internal/services/toontown"
 	"github.com/jaczerob/madamchuckle/internal/static"
+	"github.com/jaczerob/madamchuckle/pkg/toontown"
 
 	log "github.com/sirupsen/logrus"
 )

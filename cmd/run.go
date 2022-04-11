@@ -14,8 +14,8 @@ import (
 	"github.com/jaczerob/madamchuckle/internal/inits"
 	"github.com/jaczerob/madamchuckle/internal/services/database"
 	"github.com/jaczerob/madamchuckle/internal/services/metrics"
-	"github.com/jaczerob/madamchuckle/internal/services/toontown"
 	"github.com/jaczerob/madamchuckle/internal/static"
+	"github.com/jaczerob/madamchuckle/pkg/toontown"
 
 	log "github.com/sirupsen/logrus"
 )

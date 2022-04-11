@@ -9,8 +9,9 @@ import (
 	"github.com/sarulabs/di/v2"
 
 	"github.com/jaczerob/madamchuckle/internal/services/database"
-	"github.com/jaczerob/madamchuckle/internal/services/toontown"
+	"github.com/jaczerob/madamchuckle/internal/services/ttr"
 	"github.com/jaczerob/madamchuckle/internal/static"
+	"github.com/jaczerob/madamchuckle/pkg/toontown"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -51,7 +52,7 @@ func (p *EventProcessor) ProcessTask(ctx context.Context, t *asynq.Task) (err er
 				return err
 			}
 
-			embed, err = fieldOffices.ToEmbed()
+			embed, err = ttr.FieldOfficeDataToEmbed(fieldOffices)
 			if err != nil {
 				return err
 			}
@@ -61,7 +62,7 @@ func (p *EventProcessor) ProcessTask(ctx context.Context, t *asynq.Task) (err er
 				return err
 			}
 
-			embed, err = invasions.ToEmbed()
+			embed, err = ttr.InvasionDataToEmbed(invasions)
 			if err != nil {
 				return err
 			}
@@ -71,7 +72,17 @@ func (p *EventProcessor) ProcessTask(ctx context.Context, t *asynq.Task) (err er
 				return err
 			}
 
-			embed, err = population.ToEmbed()
+			embed, err = ttr.PopulationDataToEmbed(population)
+			if err != nil {
+				return err
+			}
+		case int64(static.StatusEventID):
+			status, err := p.ttr.Status()
+			if err != nil {
+				return err
+			}
+
+			embed, err = ttr.StatusToEmbed(status)
 			if err != nil {
 				return err
 			}
@@ -83,7 +94,7 @@ func (p *EventProcessor) ProcessTask(ctx context.Context, t *asynq.Task) (err er
 
 		_, err := p.session.ChannelMessageEditEmbed(event.MessageID, event.ChannelID, embed)
 		if err != nil {
-			log.WithError(err).Error("error handling event")
+			log.WithError(err).Error("error handling event, unregistering")
 			err = p.db.UnregisterEvent(event.MessageID, event.ChannelID)
 			return err
 		}

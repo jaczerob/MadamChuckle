@@ -33,7 +33,7 @@ func InitTaskScheduler(ctn di.Container) (s *asynq.Scheduler, err error) {
 		return
 	}
 
-	info, err := s.Register("@every 10m", gamestatusTask, asynq.MaxRetry(0), asynq.ProcessIn(time.Second*10))
+	info, err := s.Register("@every 10s", gamestatusTask, asynq.MaxRetry(0), asynq.ProcessIn(time.Second*10))
 	if err != nil {
 		return
 	}
@@ -46,7 +46,7 @@ func InitTaskScheduler(ctn di.Container) (s *asynq.Scheduler, err error) {
 		return
 	}
 
-	info, err = s.Register("@every 10m", eventsTask, asynq.MaxRetry(0), asynq.ProcessIn(time.Second*10))
+	info, err = s.Register("@every 10s", eventsTask, asynq.MaxRetry(0), asynq.ProcessIn(time.Second*10))
 	if err != nil {
 		return
 	}
